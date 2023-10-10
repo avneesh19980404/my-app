@@ -1,24 +1,34 @@
-import { GET_POSTS, GET_POSTS_ERROR } from '../actions/types'
+import { POST_API_SUCCESS,POST_API_FAILURE,FETCH_POST_API } from '../actions/types'
 
 const initialState ={
-    loading: true,
-    data: []
+    loading: false,
+    data: null,
+    error:null
 }
 
 const postReducer = (state = initialState, action) =>{
 
     switch(action.type){
-        case GET_POSTS:
+        case FETCH_POST_API:
             return {
                 ...state,
-                loading: false,
-                data: action.payload
+                loading: true,
+                data: null,
+                error:null
             }
-        case GET_POSTS_ERROR:
+        case POST_API_SUCCESS:
             return {
                 ...state,
                 loading: false,
-                data: null
+                data: action.payload,
+                error:null
+            }
+        case POST_API_FAILURE:
+            return {
+                ...state,
+                loading: false,
+                data: null,
+                error:action.payload
             }
         default:
             return state;

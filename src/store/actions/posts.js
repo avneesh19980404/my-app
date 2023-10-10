@@ -1,23 +1,28 @@
 import axios from 'axios'
-import { GET_POSTS, GET_POSTS_ERROR } from './types';
+import { FETCH_POST_API, POST_API_SUCCESS,POST_API_FAILURE } from './types';
+import { setData } from '.';
 
 export const getPosts = () => {
-    console.log("called")
     return (dispatch) => {
+        dispatch(setData(FETCH_POST_API));
         axios.get('https://jsonplaceholder.typicode.com/posts/')
         .then(res=>{
-            console.log("response : ",res)
-            dispatch({
-                type: GET_POSTS,
-                payload: res.data
-            })
-
-        }).catch(err=>{
-            console.log("error",err)
-            dispatch({
-                type: GET_POSTS_ERROR,
-                payload: err
-            })
+            return simulateLoginApi(res);
+        })
+        .then(r=>{
+            dispatch(setData(POST_API_SUCCESS,r.data))
+        })
+        .catch(err=>{
+            dispatch(setData(POST_API_FAILURE,err))
         });
 }
+}
+
+const simulateLoginApi = async (data) =>{
+
+    return new Promise((resolve,reject)=>{
+        setTimeout(() => {
+           resolve(data)
+        }, 3000);
+    })
 }
